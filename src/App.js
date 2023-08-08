@@ -1,23 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import {React, useState } from 'react';
+import Header from './component/Header';
+import Filter from './component/Filter';
+import Main from './component/Main';
+import Card from './component/Card';
+import food from './data';
+import './App.scss';
 
 function App() {
+  const [itemsData, setItemsData] = useState(food);
+  // filter by category
+  const category = ['الكل', ...new Set(food.map(i => i.cat))];
+  function filterByCategory(cat) {
+    (cat === 'الكل')
+      ? setItemsData(food)
+      :setItemsData(food.filter((ele) => ele.cat === cat));
+  }
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+        <Header/>
+        <Filter cat={category} filter={filterByCategory}/>
+        <Main>
+          {itemsData.map((item, ind)=> <Card key={ind} info={item}/>)}
+        </Main>
     </div>
   );
 }
